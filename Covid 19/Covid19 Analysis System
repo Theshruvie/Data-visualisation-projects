@@ -1,0 +1,114 @@
+import plotly.express as px
+import plotly.graph_objects as go
+import plotly.figure_factory as ff
+from plotly.subplots import make_subplots
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+import math
+import random
+from datetime import timedelta
+import warnings
+warnings.filterwarnings('ignore')
+#color pallette
+
+cnf='#393e46'
+dth='#ff2e63'
+rec='#21bf73'
+act='#fe9801'
+
+
+import plotly as py
+
+df=pd.read_csv("https://raw.githubusercontent.com/laxmimerit/Covid-19-Preprocessed-Dataset/main/preprocessed/covid_19_data_cleaned.csv")
+c_dw=pd.read_csv("https://raw.githubusercontent.com/laxmimerit/Covid-19-Preprocessed-Dataset/main/preprocessed/country_daywise.csv")
+cw=pd.read_csv("https://raw.githubusercontent.com/laxmimerit/Covid-19-Preprocessed-Dataset/main/preprocessed/countrywise.csv")
+dw=pd.read_csv("https://raw.githubusercontent.com/laxmimerit/Covid-19-Preprocessed-Dataset/main/preprocessed/daywise.csv")
+
+
+#functions......
+def rangee(df):
+    print("""
+++++++++++++++++++++++++
+tell us specified range:""")
+    a=int(input("""
+++++++++++++++++++++++++
+from:"""))
+    b=int(input("""
+++++++++++++++++++++++++
+to:"""))
+    print(df[a:b])
+
+
+def main():
+    print("""
+========================================
+1. View covid 19 Data(data cleaned)
+2. view the confirmed cases date wise
+3. view the recovered cases date wise
+4. View the death cases date wise
+========================================
+""")
+    opt=int(input("""
+++++++++++++++++++
+Choose:"""))
+    def viewdata():
+        print(df)
+        print("""
+==========================================
+FILLING NULL VALUES
+==========================================""")
+        df['Province/State']=df['Province/State'].fillna("")
+        print(df)
+    if opt==1:
+        viewdata()
+    elif opt==2:
+        confirmed=df.groupby('Date').sum()['Confirmed'].reset_index()
+        rangee(confirmed)
+    elif opt==3:
+        rcvrd=df.groupby('Date').sum()['Recovered'].reset_index()
+        rangee(rcvrd)
+
+    elif opt==4:
+        death=df.groupby('Date').sum()['Deaths'].reset_index()
+        rangee(death)
+    print("""now we will move forward to graph analysis""")
+    print("""
+========================================
+1. View the scatter plot for confirmed cases
+2. view the recovered cases date wise
+3. View the death cases date wise
+========================================
+""")
+    opt1=int(input("""
+++++++++++++++++++
+Choose:"""))
+    if opt1==1:
+        confirmed=df.groupby('Date').sum()['Confirmed'].reset_index()
+        fig=go.Figure()
+        fig.add_trace(go.Scatter(x=confirmed['Date'],y=confirmed['Confirmed'],mode='lines+markers'))
+        fig.update_layout(title='Confirmed case in COVID 19',yaxis_title='No. of Confirmed Cases',xaxis_title='Dates/Year')
+        fig.show()
+        plt.show()
+    elif opt1==2:
+        rcvrd=df.groupby('Date').sum()['Recovered'].reset_index()
+        fig=go.Figure()
+        fig.add_trace(go.Scatter(x=rcvrd['Date'],y=rcvrd['Recovered'],mode='lines'))
+        fig.update_layout(title='Recovered case in COVID 19',yaxis_title='No. of Recovered Cases',xaxis_title='Dates/Year')
+        fig.show()
+    elif opt1==3:
+        dth=df.groupby('Date').sum()['Deaths'].reset_index()
+        fig=go.Figure()
+        fig.add_trace(go.Scatter(x=dth['Date'],y=dth['Deaths'],mode='lines'))
+        fig.update_layout(title='Death case in COVID 19',yaxis_title='No. of Deaths',xaxis_title='Dates/Year')
+        fig.show()
+    else:
+        main()
+
+
+main()
+
+
+
