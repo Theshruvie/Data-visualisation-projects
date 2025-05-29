@@ -1,1 +1,17 @@
 
+import matplotlib.pyplot as plt
+import pandas as pd
+import plotly as py
+import plotly.graph_objects as go
+import seaborn as sns
+dw=pd.read_csv("https://raw.githubusercontent.com/laxmimerit/Covid-19-Preprocessed-Dataset/main/preprocessed/daywise.csv")
+print(dw[1:10])
+dth=dw.groupby('Date').sum()['Deaths'].reset_index()
+sns.lineplot(x=dth['Date'],y=dth['Deaths'],color='red')
+plt.title('Death cases in COVID 19')
+plt.xlabel=('Date')
+plt.ylabel=('Deaths')
+plt.show()
+fig=go.Figure()
+fig.add_trace(go.Scatter(x=dw['Date'],y=dw['Deaths'],mode='lines'))
+fig.show()
